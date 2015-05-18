@@ -1,0 +1,10 @@
+* Helm Gitignore
+** About
+This package provides a configured helm to generate =.gitignore= files using [[https://www.gitignore.io/][gitignore.io]].
+** Installation
+This package is available on [[http://melpa.org/][MELPA]] under the name =helm-gitignore=. Please note that gitignore.io's APIs are available through HTTPS, meaning if you experience issues attempting to connect to the network odds are you may need something like [[http://gnutls.org/][GnuTLS]].
+** Usage
+=M-x helm-gitignore= will bring up a Helm interface with all available operating systems, IDEs, and programming languages available to generate a =.gitignore= from. You can select a single or multiple candidates to generate a =.gitignore= based on the selected candidate(s). A buffer is generated with the resulting =.gitignore=, at which point you can save/copy.
+** Credits
+- [[https://github.com/joeblau][joeblau]] :: for [[https://www.gitignore.io/][gitignore.io]]
+- [[https://github.com/emacs-helm][emacs-helm]] :: for [[https://emacs-helm.github.io/helm/][Helm]]
