@@ -4,7 +4,7 @@
 ;; Version: 0.1.0
 ;; Keywords: helm gitignore gitignore.io
 ;; Homepage: https://github.com/jupl/helm-gitignore
-;; Package-Requires: ((gitignore-mode "1.1.0") (helm "1.7.0") (request "0.1.0"))
+;; Package-Requires: ((gitignore-mode "1.1.0") (helm "1.7.0") (request "0.1.0") (cl-lib "0.5"))
 
 ;;; Commentary:
 ;;
@@ -18,6 +18,7 @@
 (require 'helm)
 (require 'json)
 (require 'request)
+(require 'cl-lib)
 
 (defvar helm-gitignore--api-url
   "https://www.gitignore.io/api/%s"
@@ -41,7 +42,7 @@
     (request
      (helm-gitignore--generate-url candidates)
      :parser 'buffer-string
-     :success (function*
+     :success (cl-function
                (lambda (&key data &allow-other-keys)
                  (when data
                    (with-current-buffer (get-buffer-create "*gitignore*")
@@ -50,7 +51,7 @@
                      (insert data)
                      (goto-char (point-min))
                      (pop-to-buffer (current-buffer))))))
-     :error (function*
+     :error (cl-function
              (lambda (&key error-thrown &allow-other-keys&rest _)
                (message error-thrown))))))
 
@@ -76,12 +77,12 @@
     (request
      helm-gitignore--list-url
      :parser 'json-read
-     :success (function*
+     :success (cl-function
                (lambda (&key data &allow-other-keys)
                  (setq helm-gitignore--candidates
                        (mapcar 'helm-gitignore--format-result data))
                  (helm-gitignore--start)))
-     :error (function*
+     :error (cl-function
              (lambda (&key error-thrown &allow-other-keys&rest _)
                (message error-thrown))))))
 
