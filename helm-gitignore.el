@@ -67,6 +67,7 @@
   (helm :sources 'helm-gitignore--source
         :buffer "*helm-gitignore*"))
 
+;;;###autoload
 (defun helm-gitignore ()
   "Helm to generate .gitignore using gitignore.io."
   (interactive)
