@@ -4,7 +4,7 @@
 ;; Version: 0.1.0
 ;; Keywords: helm gitignore gitignore.io
 ;; Homepage: https://github.com/jupl/helm-gitignore
-;; Package-Requres: ((gitignore-mode "1.1.0") (helm "1.7.0") (request "0.1.0"))
+;; Package-Requires: ((gitignore-mode "1.1.0") (helm "1.7.0") (request "0.1.0"))
 
 ;;; Commentary:
 ;;
@@ -67,6 +67,7 @@
   (helm :sources 'helm-gitignore--source
         :buffer "*helm-gitignore*"))
 
+;;;###autoload
 (defun helm-gitignore ()
   "Helm to generate .gitignore using gitignore.io."
   (interactive)
