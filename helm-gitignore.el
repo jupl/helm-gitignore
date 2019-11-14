@@ -1,7 +1,7 @@
 ;;; helm-gitignore.el --- Generate .gitignore files with gitignore.io.
 ;;
 ;; Author: Juan Placencia
-;; Version: 0.2.0
+;; Version: 0.2.1
 ;; Keywords: helm gitignore gitignore.io
 ;; Homepage: https://github.com/jupl/helm-gitignore
 ;; Package-Requires: ((gitignore-mode "1.1.0") (helm "1.7.0") (request "0.1.0") (cl-lib "0.5"))
@@ -25,42 +25,31 @@
   "Url used to generate .gitignore file.")
 
 (defvar helm-gitignore--list-url
-  "https://www.gitignore.io/dropdown/templates.json?term=%s"
+  "https://www.gitignore.io/dropdown/templates.json"
   "Url used to get list of templates in raw and human-friendly text.")
 
-(defvar helm-gitignore--cache nil
-  "Cache that contains results of querying of candidates from gitignore.io.")
+(defvar helm--gitignore--candidates '()
+  "The results of querying of candidates from gitignore.io.")
 
 (defvar helm-gitignore--source
   (helm-build-sync-source "gitignore.io"
-    :candidates 'helm-gitignore--candidates
-    :action 'helm-gitignore--action
-    :volatile t
-    :requires-pattern 1))
+    :candidates #'helm-gitignore--query-candidates
+    :action 'helm-gitignore--action))
 
-(defun helm-gitignore--candidates ()
+(defun helm-gitignore--query-candidates ()
   "Query for gitignore templates."
-  (let ((delay 0.1))
-    (unless helm-gitignore--cache
-      (run-at-time delay nil 'helm-gitignore--query-candidates helm-pattern))
-    (and (sit-for delay)
-         (prog1 helm-gitignore--cache
-           (and helm-gitignore--cache
-                (setq helm-gitignore--cache nil))))))
-
-(defun helm-gitignore--query-candidates (pattern)
-  "Query for gitignore templates using given PATTERN."
   (request
-   (format helm-gitignore--list-url pattern)
+   helm-gitignore--list-url
    :parser 'json-read
    :success (cl-function
              (lambda (&key data &allow-other-keys)
-               (setq helm-gitignore--cache
-                     (mapcar 'helm-gitignore--format-result data))
-               (and helm-alive-p (helm-update))))
+               (setq helm-gitignore--candidates
+                     (mapcar #'helm-gitignore--format-result data))))
    :error (cl-function
            (lambda (&key error-thrown &allow-other-keys&rest _)
-             (message error-thrown)))))
+             (message error-thrown)))
+   :sync t)
+  helm-gitignore--candidates)
 
 (defun helm-gitignore--action (candidate)
   "Generate .gitignore given at least a CANDIDATE and present to screen."
