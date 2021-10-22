@@ -4,7 +4,7 @@
 ;; Version: 0.2.0
 ;; Keywords: helm gitignore gitignore.io
 ;; Homepage: https://github.com/jupl/helm-gitignore
-;; Package-Requires: ((gitignore-mode "1.1.0") (helm "1.7.0") (request "0.1.0") (cl-lib "0.5"))
+;; Package-Requires: ((git-modes "1.4.0") (helm "1.7.0") (request "0.1.0") (cl-lib "0.5"))
 
 ;;; Commentary:
 ;;
